@@ -17,6 +17,9 @@ npm-debug.log*
 *.swp
 *.swo
 
+# Uploads
+uploads/
+
 # OS
 .DS_Store
 Thumbs.db

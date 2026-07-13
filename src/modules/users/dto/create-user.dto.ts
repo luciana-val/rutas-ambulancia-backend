@@ -1,4 +1,4 @@
-import { IsString, MinLength, IsEnum, IsOptional } from 'class-validator';
+import { IsString, MinLength, IsEnum, IsOptional, IsUUID } from 'class-validator';
 import { ApiProperty } from '@nestjs/swagger';
 import { UserRole } from '../../../shared/interfaces';
 
@@ -21,4 +21,9 @@ export class CreateUserDto {
   @IsEnum(UserRole)
   @IsOptional()
   role?: UserRole;
+
+  @ApiProperty({ example: 'uuid-del-hospital', required: false })
+  @IsUUID()
+  @IsOptional()
+  hospitalId?: string;
 }

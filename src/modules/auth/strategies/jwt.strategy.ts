@@ -4,6 +4,7 @@ import { ExtractJwt, Strategy } from 'passport-jwt';
 import { InjectRepository } from '@nestjs/typeorm';
 import { ConfigService } from '@nestjs/config';
 import { Repository } from 'typeorm';
+import { Request } from 'express';
 import { User } from '../../../entities/user.entity';
 
 interface JwtPayload {
@@ -17,18 +18,20 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
   constructor(
     @InjectRepository(User)
     private userRepository: Repository<User>,
-    configService: ConfigService,
   ) {
     super({
-      jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
+      jwtFromRequest: ExtractJwt.fromExtractors([
+        (req: Request) => req?.cookies?.['access_token'] || null,
+        ExtractJwt.fromAuthHeaderAsBearerToken(),
+      ]),
       ignoreExpiration: false,
-      secretOrKey: configService.getOrThrow('app.jwtSecret'),
+      secretOrKey: process.env.JWT_SECRET!,
     });
   }
 
   async validate(payload: JwtPayload) {
     const user = await this.userRepository.findOne({ where: { id: payload.sub } });
     if (!user) throw new UnauthorizedException();
-    return { id: user.id, username: user.username, role: user.role, name: user.name };
+    return { id: user.id, username: user.username, role: user.role, name: user.name, hospitalId: user.hospitalId };
   }
 }

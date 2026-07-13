@@ -1,4 +1,4 @@
-import { IsString, IsEnum, IsOptional, MinLength } from 'class-validator';
+import { IsString, IsEnum, IsOptional, MinLength, IsUUID } from 'class-validator';
 import { ApiProperty } from '@nestjs/swagger';
 import { UserRole } from '../../../shared/interfaces';
 
@@ -18,4 +18,15 @@ export class UpdateUserDto {
   @IsEnum(UserRole)
   @IsOptional()
   role?: UserRole;
+
+  @ApiProperty({ required: false })
+  @IsUUID()
+  @IsOptional()
+  hospitalId?: string;
+
+  @ApiProperty({ required: false })
+  @IsString()
+  @MinLength(6)
+  @IsOptional()
+  password?: string;
 }

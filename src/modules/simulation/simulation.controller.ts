@@ -58,4 +58,10 @@ export class SimulationController {
   getPositions(@Query('hospitalId') hospitalId?: string) {
     return this.simulationService.getPositions(hospitalId);
   }
+
+  @Post('optimize')
+  @ApiQuery({ name: 'hospitalId', required: false })
+  optimize(@Body() dto: { hospitalId?: string }) {
+    return this.simulationService.batchAssignWithSimplex(dto.hospitalId);
+  }
 }

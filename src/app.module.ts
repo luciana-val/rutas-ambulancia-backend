@@ -36,7 +36,7 @@ import * as process from 'process';
           database: config.get('DB_DATABASE') || 'ambulance_routing',
           entities: [User, RefreshToken, Hospital, Ambulance, Alert, SimulationRoute],
           synchronize: config.get('app.nodeEnv') !== 'production',
-          logging: config.get('app.nodeEnv') === 'development',
+          logging: false,
         };
         return dbConfig;
       },
